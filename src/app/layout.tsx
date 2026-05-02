@@ -1,21 +1,34 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import StickyWhatsApp from "@/components/StickyWhatsApp";
+import { Viewport } from "next";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "Pravas Travels | Premium Travel Packages & Tours",
+  title: "Pravaas Holidays | Curated Luxury Travel for Couples",
   description:
-    "Discover amazing travel packages to destinations across the world. Book your dream vacation with Pravas Travels - curated experiences, best prices, 24/7 support.",
-  keywords: ["travel", "tours", "packages", "vacation", "adventure"],
+    "Premium, curated travel experiences for couples and luxury travelers. Honeymoon packages, anniversary getaways — planned by dedicated travel experts. Enquire today.",
+  keywords: ["luxury travel", "honeymoon packages", "couple travel", "premium tours", "Pravaas Holidays"],
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
-export const viewport = {
+export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
 };
@@ -26,8 +39,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-poppins">{children}</body>
+    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
+      <body className="min-h-screen flex flex-col font-body antialiased">
+        <Header />
+        <main className="flex-grow pt-16">
+          {children}
+        </main>
+        <Footer />
+        <StickyWhatsApp />
+      </body>
     </html>
   );
 }

@@ -1,25 +1,19 @@
-import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import TrustBar from "@/components/TrustBar";
 import FeaturedPackages from "@/components/FeaturedPackages";
-import WhyChooseUs from "@/components/WhyChooseUs";
-import PopularDestinations from "@/components/PopularDestinations";
+import WhyPravaas from "@/components/WhyPravaas";
 import Testimonials from "@/components/Testimonials";
-import CTABanner from "@/components/CTABanner";
-import ContactForm from "@/components/ContactForm";
-import Footer from "@/components/Footer";
+import CTASection from "@/components/CTASection";
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
-      <Navbar />
+    <>
       <Hero />
+      <TrustBar />
       <FeaturedPackages />
-      <WhyChooseUs />
-      <PopularDestinations />
+      <WhyPravaas />
       <Testimonials />
-      <ContactForm />
-      <CTABanner />
-      <Footer />
-    </div>
+      <CTASection />
+    </>
   );
 }

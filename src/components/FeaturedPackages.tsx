@@ -3,33 +3,53 @@ import PackageCard from "./PackageCard";
 import Link from "next/link";
 
 export default function FeaturedPackages() {
-  const featured = packages.slice(0, 3);
+  const international = packages.filter((p) => p.category === "international" && p.featured).slice(0, 3);
+  const domestic = packages.filter((p) => p.category === "domestic" && p.featured).slice(0, 3);
 
   return (
-    <section className="py-20 bg-black border-b border-gray-800">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">
+    <section className="py-20 bg-surface">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section header */}
+        <div className="text-center mb-14 animate-slide-down">
+          <p className="text-gold text-sm font-semibold tracking-widest uppercase mb-3 animate-slide-right">
+            Handpicked for you
+          </p>
+          <h2 className="font-heading text-3xl md:text-4xl font-bold text-navy animate-scale-in" style={{ animationDelay: '0.1s' }}>
             Featured Packages
           </h2>
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Handpicked destinations and experiences
+          <p className="text-slate mt-3 max-w-xl mx-auto animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            Curated international getaways and domestic escapes — each designed for an unforgettable experience.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {featured.map((pkg) => (
-            <PackageCard key={pkg.id} pkg={pkg} />
-          ))}
+        {/* International */}
+        <div className="mb-14">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-heading text-xl font-semibold text-navy">International</h3>
+            <Link href="/international" className="text-cta text-sm font-medium hover:underline">
+              View all →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {international.map((pkg) => (
+              <PackageCard key={pkg.id} pkg={pkg} />
+            ))}
+          </div>
         </div>
 
-        <div className="text-center">
-          <Link
-            href="/packages"
-            className="px-6 py-3 bg-white text-black rounded hover:bg-gray-200 inline-block"
-          >
-            View All Packages
-          </Link>
+        {/* Domestic */}
+        <div>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-heading text-xl font-semibold text-navy">Domestic</h3>
+            <Link href="/domestic" className="text-cta text-sm font-medium hover:underline">
+              View all →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {domestic.map((pkg) => (
+              <PackageCard key={pkg.id} pkg={pkg} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

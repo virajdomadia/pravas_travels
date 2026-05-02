@@ -3,50 +3,48 @@ import { Package } from "@/lib/data";
 
 export default function PackageCard({ pkg }: { pkg: Package }) {
   return (
-    <Link href={`/packages/${pkg.id}`}>
-      <div className="bg-gray-900 rounded border border-gray-800 overflow-hidden hover:border-gray-700 cursor-pointer h-full flex flex-col">
-        <div className="relative h-48 overflow-hidden bg-gray-800">
-          <img
-            src={pkg.image}
-            alt={pkg.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute top-4 right-4 bg-black text-white px-3 py-1 text-xs font-semibold border border-gray-700 rounded">
+    <Link href={`/packages/${pkg.id}`} className="group block bg-white rounded-2xl overflow-hidden border border-gray-100 h-full flex flex-col hover-lift hover-glow card-3d animate-fade-in" style={{ perspective: '1200px' }}>
+      {/* Image */}
+      <div className="relative h-52 overflow-hidden">
+        <img
+          src={pkg.image}
+          alt={pkg.title}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+        />
+        <div className="absolute top-3 left-3 flex gap-2">
+          <span className="bg-navy text-white text-xs font-semibold px-3 py-1 rounded-full">
             {pkg.duration}
-          </div>
+          </span>
+          {pkg.perfectForCouples && (
+            <span className="bg-gold text-white text-xs font-semibold px-3 py-1 rounded-full">
+              Couples
+            </span>
+          )}
         </div>
+      </div>
 
-        <div className="p-6 flex-grow flex flex-col">
-          <p className="text-xs text-gray-400 mb-2">{pkg.location}</p>
-          <h3 className="text-lg font-semibold mb-3">{pkg.title}</h3>
+      {/* Body */}
+      <div className="p-5 flex flex-col flex-grow">
+        <p className="text-xs text-muted uppercase tracking-wide mb-1">{pkg.location}</p>
+        <h3 className="font-heading text-lg font-semibold text-navy mb-3 leading-snug">{pkg.title}</h3>
 
-          <div className="mb-4 flex-grow">
-            <ul className="text-sm text-gray-400 space-y-1">
-              {pkg.highlights.slice(0, 2).map((highlight, idx) => (
-                <li key={idx} className="flex items-start gap-2">
-                  <span className="text-gray-500 mt-0.5">•</span>
-                  <span>{highlight}</span>
-                </li>
-              ))}
-              {pkg.highlights.length > 2 && (
-                <li className="text-gray-500 text-xs">
-                  +{pkg.highlights.length - 2} more
-                </li>
-              )}
-            </ul>
+        <ul className="space-y-1.5 mb-4 flex-grow">
+          {pkg.highlights.slice(0, 3).map((h, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-slate">
+              <span className="text-gold mt-0.5 shrink-0">✓</span>
+              {h}
+            </li>
+          ))}
+        </ul>
+
+        <div className="border-t border-gray-100 pt-4 flex items-center justify-between">
+          <div>
+            <p className="text-xs text-muted">Starting from</p>
+            <p className="text-xl font-bold text-navy">₹{pkg.price.toLocaleString()}</p>
           </div>
-
-          <div className="border-t border-gray-800 pt-4 flex items-center justify-between">
-            <div>
-              <p className="text-xs text-gray-500">From</p>
-              <p className="text-xl font-semibold">
-                ₹{pkg.price.toLocaleString()}
-              </p>
-            </div>
-            <button className="px-4 py-2 bg-white text-black rounded text-sm font-semibold hover:bg-gray-100">
-              View
-            </button>
-          </div>
+          <span className="bg-cta text-white text-sm font-semibold px-5 py-2 rounded-full group-hover:bg-cta-hover transition-colors">
+            View
+          </span>
         </div>
       </div>
     </Link>
