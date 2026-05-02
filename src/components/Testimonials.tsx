@@ -1,8 +1,9 @@
+import Image from "next/image";
 import { testimonials } from "@/lib/data";
 
 export default function Testimonials() {
   return (
-    <section className="py-20 bg-surface">
+    <section className="py-20 bg-surface" aria-label="Customer testimonials">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <p className="text-gold text-sm font-semibold tracking-widest uppercase mb-3">
@@ -33,9 +34,11 @@ export default function Testimonials() {
               </p>
 
               <div className="flex items-center gap-3 border-t border-gray-100 pt-5">
-                <img
+                <Image
                   src={t.image}
                   alt={t.name}
+                  width={44}
+                  height={44}
                   className="w-11 h-11 rounded-full object-cover"
                 />
                 <div>

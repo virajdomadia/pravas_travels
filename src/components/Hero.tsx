@@ -1,14 +1,22 @@
+"use client";
+
+import Image from "next/image";
 import Link from "next/link";
-import { whatsappURL } from "@/lib/data";
+import { useState } from "react";
+import EnquiryModal from "./EnquiryModal";
 
 export default function Hero() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
-    <section className="relative w-full min-h-[92vh] flex items-center overflow-hidden">
+    <section className="relative w-full min-h-[92vh] flex items-center overflow-hidden" aria-label="Hero section">
       {/* Background image */}
-      <img
+      <Image
         src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1920&q=85"
         alt="Couple travelling"
-        className="absolute inset-0 w-full h-full object-cover"
+        fill
+        priority
+        className="absolute inset-0 object-cover"
+        sizes="100vw"
       />
       {/* Overlay — deep navy → navy-deep gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy-deep/55 to-navy/20" />
@@ -27,14 +35,12 @@ export default function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-            <a
-              href={whatsappURL("Hi Pravaas! I'd like to enquire about a travel package.")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-cta hover:bg-cta-hover text-white font-semibold px-8 py-4 rounded-full text-sm btn-animate hover-lift"
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center justify-center bg-cta hover:bg-cta-hover text-white font-semibold px-8 py-4 rounded-full text-sm btn-animate hover-lift transition-colors"
             >
               Enquire Now
-            </a>
+            </button>
             <Link
               href="/international"
               className="inline-flex items-center justify-center border border-white/50 hover:border-white text-white font-semibold px-8 py-4 rounded-full text-sm hover-lift"
@@ -42,6 +48,8 @@ export default function Hero() {
               Explore Packages
             </Link>
           </div>
+
+          <EnquiryModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </div>
       </div>
 

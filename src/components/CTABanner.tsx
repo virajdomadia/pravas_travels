@@ -19,7 +19,7 @@ export default function CTABanner() {
             Browse Packages
           </Link>
           <a
-            href="https://wa.me/919876543210"
+            href="https://wa.me/919167439172"
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 border border-gray-700 rounded hover:bg-gray-900 inline-block"

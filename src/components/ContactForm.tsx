@@ -5,19 +5,44 @@ import { useState } from "react";
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
-    setTimeout(() => {
+    try {
+      const formData = new FormData(e.currentTarget);
+      const data = {
+        name: formData.get("name"),
+        email: formData.get("email"),
+        phone: formData.get("phone"),
+        destination: formData.get("destination"),
+        message: formData.get("message"),
+      };
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit inquiry");
+      }
+
       setSubmitted(true);
-      setLoading(false);
       const form = e.target as HTMLFormElement;
       form.reset();
 
       setTimeout(() => setSubmitted(false), 5000);
-    }, 1000);
+    } catch (err) {
+      setError("Failed to submit inquiry. Please try again.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,19 +70,19 @@ export default function ContactForm() {
             <div className="text-3xl mb-4">📱</div>
             <h3 className="font-semibold mb-2 text-sm">WhatsApp</h3>
             <a
-              href="https://wa.me/919876543210"
+              href="https://wa.me/919167439172"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-400 hover:text-white text-sm"
             >
-              +91 98765 43210
+              +91 91674 39172
             </a>
           </div>
 
           <div className="text-center">
             <div className="text-3xl mb-4">📍</div>
             <h3 className="font-semibold mb-2 text-sm">Location</h3>
-            <p className="text-gray-400 text-sm">New Delhi, India</p>
+            <p className="text-gray-400 text-sm">Mumbai, India</p>
           </div>
         </div>
 
@@ -70,6 +95,7 @@ export default function ContactForm() {
                 </label>
                 <input
                   type="text"
+                  name="name"
                   required
                   placeholder="Your name"
                   className="w-full px-4 py-3 bg-black border border-gray-800 rounded focus:border-gray-700 focus:outline-none text-white placeholder:text-gray-600"
@@ -82,7 +108,7 @@ export default function ContactForm() {
                 </label>
                 <input
                   type="email"
-                  required
+                  name="email"
                   placeholder="your@email.com"
                   className="w-full px-4 py-3 bg-black border border-gray-800 rounded focus:border-gray-700 focus:outline-none text-white placeholder:text-gray-600"
                 />
@@ -96,6 +122,7 @@ export default function ContactForm() {
                 </label>
                 <input
                   type="tel"
+                  name="phone"
                   required
                   placeholder="+91 98765 43210"
                   className="w-full px-4 py-3 bg-black border border-gray-800 rounded focus:border-gray-700 focus:outline-none text-white placeholder:text-gray-600"
@@ -106,12 +133,15 @@ export default function ContactForm() {
                 <label className="block text-xs font-medium text-gray-400 mb-2">
                   Destination
                 </label>
-                <select className="w-full px-4 py-3 bg-black border border-gray-800 rounded focus:border-gray-700 focus:outline-none text-white">
+                <select
+                  name="destination"
+                  className="w-full px-4 py-3 bg-black border border-gray-800 rounded focus:border-gray-700 focus:outline-none text-white"
+                >
                   <option value="">Select</option>
-                  <option value="asia">Asia</option>
-                  <option value="europe">Europe</option>
-                  <option value="africa">Africa</option>
-                  <option value="americas">Americas</option>
+                  <option value="Asia">Asia</option>
+                  <option value="Europe">Europe</option>
+                  <option value="Africa">Africa</option>
+                  <option value="Americas">Americas</option>
                 </select>
               </div>
             </div>
@@ -121,7 +151,7 @@ export default function ContactForm() {
                 Message
               </label>
               <textarea
-                required
+                name="message"
                 placeholder="Tell us about your travel plans..."
                 rows={5}
                 className="w-full px-4 py-3 bg-black border border-gray-800 rounded focus:border-gray-700 focus:outline-none text-white placeholder:text-gray-600 resize-none"
@@ -136,8 +166,14 @@ export default function ContactForm() {
               {loading ? "Sending..." : "Send Inquiry"}
             </button>
 
+            {error && (
+              <div className="p-4 bg-red-500/20 border border-red-500 rounded text-red-200 text-center text-sm">
+                ✗ {error}
+              </div>
+            )}
+
             {submitted && (
-              <div className="p-4 bg-gray-900 border border-gray-800 rounded text-gray-300 text-center text-sm">
+              <div className="p-4 bg-green-500/20 border border-green-500 rounded text-green-200 text-center text-sm">
                 ✓ Thank you! We'll be in touch soon.
               </div>
             )}

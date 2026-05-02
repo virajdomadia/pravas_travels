@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Package } from "@/lib/data";
 
@@ -6,10 +7,12 @@ export default function PackageCard({ pkg }: { pkg: Package }) {
     <Link href={`/packages/${pkg.id}`} className="group block bg-white rounded-2xl overflow-hidden border border-gray-100 h-full flex flex-col hover-lift hover-glow card-3d animate-fade-in" style={{ perspective: '1200px' }}>
       {/* Image */}
       <div className="relative h-52 overflow-hidden">
-        <img
+        <Image
           src={pkg.image}
           alt={pkg.title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+          fill
+          className="object-cover group-hover:scale-110 transition-transform duration-700"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
         <div className="absolute top-3 left-3 flex gap-2">
           <span className="bg-navy text-white text-xs font-semibold px-3 py-1 rounded-full">

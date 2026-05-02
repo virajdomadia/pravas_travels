@@ -1,5 +1,34 @@
+import type { Metadata } from "next";
+import Image from "next/image";
 import CTASection from "@/components/CTASection";
 import { whatsappURL } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "About Us — Our Story",
+  description:
+    "Pravaas Holidays was built because travel planning was broken. One expert. Transparent pricing. WhatsApp support throughout. 1,000+ couples traveled across 30+ destinations.",
+  openGraph: {
+    title: "About Pravaas Holidays — Our Story",
+    description:
+      "We built Pravaas because couples deserved better. One dedicated travel expert, transparent pricing, and real-time WhatsApp support. No call centres, no hidden costs.",
+    url: "/about",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80",
+        width: 1200,
+        height: 630,
+        alt: "About Pravaas Holidays",
+      },
+    ],
+  },
+  twitter: {
+    title: "About Pravaas Holidays",
+    description:
+      "One dedicated travel expert. Transparent pricing. WhatsApp support throughout. 1,000+ couples trusted Pravaas.",
+    images: ["https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80"],
+  },
+  alternates: { canonical: "/about" },
+};
 
 const differentiators = [
   {
@@ -36,10 +65,12 @@ export default function AboutPage() {
     <>
       {/* Hero */}
       <section className="relative bg-navy py-24 overflow-hidden">
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80"
           alt="About Pravaas"
-          className="absolute inset-0 w-full h-full object-cover opacity-15"
+          fill
+          className="absolute inset-0 object-cover opacity-15"
+          sizes="100vw"
         />
         <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gold text-sm font-semibold tracking-widest uppercase mb-4">Our story</p>

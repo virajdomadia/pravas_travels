@@ -7,7 +7,7 @@ export default function FeaturedPackages() {
   const domestic = packages.filter((p) => p.category === "domestic" && p.featured).slice(0, 3);
 
   return (
-    <section className="py-20 bg-surface">
+    <section className="py-20 bg-surface" aria-label="Featured packages">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="text-center mb-14 animate-slide-down">
@@ -23,7 +23,7 @@ export default function FeaturedPackages() {
         </div>
 
         {/* International */}
-        <div className="mb-14">
+        <section className="mb-14" aria-label="International packages">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-heading text-xl font-semibold text-navy">International</h3>
             <Link href="/international" className="text-cta text-sm font-medium hover:underline">
@@ -35,10 +35,10 @@ export default function FeaturedPackages() {
               <PackageCard key={pkg.id} pkg={pkg} />
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Domestic */}
-        <div>
+        <section aria-label="Domestic packages">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-heading text-xl font-semibold text-navy">Domestic</h3>
             <Link href="/domestic" className="text-cta text-sm font-medium hover:underline">
@@ -50,7 +50,7 @@ export default function FeaturedPackages() {
               <PackageCard key={pkg.id} pkg={pkg} />
             ))}
           </div>
-        </div>
+        </section>
       </div>
     </section>
   );

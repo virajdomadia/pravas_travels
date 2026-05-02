@@ -1,43 +1,78 @@
-"use client";
-
-import { useState, useMemo } from "react";
+import type { Metadata } from "next";
+import Image from "next/image";
 import { packages } from "@/lib/data";
-import PackageCard from "@/components/PackageCard";
-import CTASection from "@/components/CTASection";
+import DomesticPackagesClient from "@/components/DomesticPackagesClient";
 
-const BUDGETS = [
-  { label: "All budgets", min: 0, max: Infinity },
-  { label: "Under ₹15,000", min: 0, max: 15000 },
-  { label: "₹15,000 – ₹20,000", min: 15000, max: 20000 },
-  { label: "₹20,000+", min: 20000, max: Infinity },
-];
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.pravaasholidays.com";
 
-const DURATIONS = ["All", "4D/3N", "5D/4N", "6D/5N"];
+export const metadata: Metadata = {
+  title: "Domestic Tour Packages India — Kerala, Rajasthan, Andaman & More",
+  description:
+    "Explore India's finest destinations with Pravaas Holidays — Kerala backwaters, Rajasthan forts, Andaman beaches, Himachal hills, Goa. Honeymoon & couple packages starting ₹12,999.",
+  openGraph: {
+    title: "Domestic Tour Packages India | Pravaas Holidays",
+    description:
+      "Kerala backwaters to Rajasthan forts, Andaman beaches to Himalayan meadows — India's finest curated for you. Starting ₹12,999 per person.",
+    url: "/domestic",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1524230572899-a752b3835840?w=1200&q=80",
+        width: 1200,
+        height: 630,
+        alt: "Domestic travel packages India",
+      },
+    ],
+  },
+  twitter: {
+    title: "Domestic Tour Packages India | Pravaas Holidays",
+    description: "Kerala, Rajasthan, Andaman, Himachal, Goa — couple packages from ₹12,999.",
+    images: ["https://images.unsplash.com/photo-1524230572899-a752b3835840?w=1200&q=80"],
+  },
+  alternates: { canonical: "/domestic" },
+};
 
 export default function DomesticPage() {
-  const [budgetIdx, setBudgetIdx] = useState(0);
-  const [duration, setDuration] = useState("All");
+  const domesticPackages = packages.filter((p) => p.category === "domestic");
 
-  const base = packages.filter((p) => p.category === "domestic");
-
-  const filtered = useMemo(() => {
-    const { min, max } = BUDGETS[budgetIdx];
-    return base.filter(
-      (p) =>
-        p.price >= min &&
-        p.price <= max &&
-        (duration === "All" || p.duration === duration)
-    );
-  }, [budgetIdx, duration, base]);
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Domestic Tour Packages India | Pravaas Holidays",
+    description: "India's finest destinations curated for couples and travelers",
+    numberOfItems: domesticPackages.length,
+    itemListElement: domesticPackages.map((pkg, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      item: {
+        "@type": "TouristTrip",
+        name: pkg.title,
+        description: pkg.description,
+        url: `${SITE_URL}/packages/${pkg.id}`,
+        image: pkg.image,
+        offers: {
+          "@type": "Offer",
+          price: pkg.price.toString(),
+          priceCurrency: "INR",
+          availability: "https://schema.org/InStock",
+        },
+      },
+    })),
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
       {/* Hero banner */}
       <section className="relative bg-navy py-20 overflow-hidden">
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1524230572899-a752b3835840?w=1200&q=80"
           alt="Domestic travel India"
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
+          fill
+          className="absolute inset-0 object-cover opacity-20"
+          sizes="100vw"
         />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gold text-sm font-semibold tracking-widest uppercase mb-3">
@@ -47,77 +82,12 @@ export default function DomesticPage() {
             Domestic Packages
           </h1>
           <p className="text-gray-300 max-w-xl mx-auto">
-            From Kerala backwaters to Rajasthan forts, Andaman beaches to Himalayan meadows — India's finest, curated for you.
+            From Kerala backwaters to Rajasthan forts, Andaman beaches to Himalayan meadows — India&apos;s finest, curated for you.
           </p>
         </div>
       </section>
 
-      {/* Filters + Grid */}
-      <section className="py-14 bg-surface">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Filter bar */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 mb-10 flex flex-col sm:flex-row gap-5 items-start sm:items-center">
-            <div>
-              <p className="text-xs font-semibold text-muted uppercase mb-2">Budget</p>
-              <div className="flex flex-wrap gap-2">
-                {BUDGETS.map((b, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setBudgetIdx(i)}
-                    className={`text-xs px-4 py-1.5 rounded-full border transition-colors ${
-                      budgetIdx === i
-                        ? "bg-navy text-white border-navy"
-                        : "border-gray-200 text-slate hover:border-navy hover:text-navy"
-                    }`}
-                  >
-                    {b.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="sm:border-l sm:border-gray-200 sm:pl-5">
-              <p className="text-xs font-semibold text-muted uppercase mb-2">Duration</p>
-              <div className="flex flex-wrap gap-2">
-                {DURATIONS.map((d) => (
-                  <button
-                    key={d}
-                    onClick={() => setDuration(d)}
-                    className={`text-xs px-4 py-1.5 rounded-full border transition-colors ${
-                      duration === d
-                        ? "bg-navy text-white border-navy"
-                        : "border-gray-200 text-slate hover:border-navy hover:text-navy"
-                    }`}
-                  >
-                    {d}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Result count */}
-          <p className="text-sm text-muted mb-6">
-            {filtered.length} package{filtered.length !== 1 ? "s" : ""} found
-          </p>
-
-          {/* Cards */}
-          {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {filtered.map((pkg) => (
-                <PackageCard key={pkg.id} pkg={pkg} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20 text-muted">
-              <p className="text-lg font-semibold mb-2">No packages match your filters</p>
-              <p className="text-sm">Try adjusting your budget or duration selection.</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <CTASection />
+      <DomesticPackagesClient />
     </>
   );
 }

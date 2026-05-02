@@ -1,43 +1,78 @@
-"use client";
-
-import { useState, useMemo } from "react";
+import type { Metadata } from "next";
+import Image from "next/image";
 import { packages } from "@/lib/data";
-import PackageCard from "@/components/PackageCard";
-import CTASection from "@/components/CTASection";
+import InternationalPackagesClient from "@/components/InternationalPackagesClient";
 
-const BUDGETS = [
-  { label: "All budgets", min: 0, max: Infinity },
-  { label: "Under ₹30,000", min: 0, max: 30000 },
-  { label: "₹30,000 – ₹45,000", min: 30000, max: 45000 },
-  { label: "₹45,000+", min: 45000, max: Infinity },
-];
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.pravaasholidays.com";
 
-const DURATIONS = ["All", "4D/3N", "5D/4N", "6D/5N", "7D/6N"];
+export const metadata: Metadata = {
+  title: "International Tour Packages — Bali, Paris, Dubai & More",
+  description:
+    "Browse curated international holiday packages from India — Bali, Paris, Dubai, Switzerland, Japan, Maldives. Honeymoon & couple packages starting ₹24,999. Custom itineraries, transparent pricing.",
+  openGraph: {
+    title: "International Tour Packages | Pravaas Holidays",
+    description:
+      "Bali to Paris, Dubai to Maldives — curated international packages for couples and luxury travelers. Starting ₹24,999 per person.",
+    url: "/international",
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80",
+        width: 1200,
+        height: 630,
+        alt: "International travel packages",
+      },
+    ],
+  },
+  twitter: {
+    title: "International Tour Packages | Pravaas Holidays",
+    description: "Bali, Paris, Dubai, Maldives — curated couple packages from ₹24,999.",
+    images: ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"],
+  },
+  alternates: { canonical: "/international" },
+};
 
 export default function InternationalPage() {
-  const [budgetIdx, setBudgetIdx] = useState(0);
-  const [duration, setDuration] = useState("All");
+  const internationalPackages = packages.filter((p) => p.category === "international");
 
-  const base = packages.filter((p) => p.category === "international");
-
-  const filtered = useMemo(() => {
-    const { min, max } = BUDGETS[budgetIdx];
-    return base.filter(
-      (p) =>
-        p.price >= min &&
-        p.price <= max &&
-        (duration === "All" || p.duration === duration)
-    );
-  }, [budgetIdx, duration, base]);
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "International Tour Packages | Pravaas Holidays",
+    description: "Curated international travel packages for couples and luxury travelers",
+    numberOfItems: internationalPackages.length,
+    itemListElement: internationalPackages.map((pkg, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      item: {
+        "@type": "TouristTrip",
+        name: pkg.title,
+        description: pkg.description,
+        url: `${SITE_URL}/packages/${pkg.id}`,
+        image: pkg.image,
+        offers: {
+          "@type": "Offer",
+          price: pkg.price.toString(),
+          priceCurrency: "INR",
+          availability: "https://schema.org/InStock",
+        },
+      },
+    })),
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
       {/* Hero banner */}
       <section className="relative bg-navy py-20 overflow-hidden">
-        <img
+        <Image
           src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
           alt="International travel"
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
+          fill
+          className="absolute inset-0 object-cover opacity-20"
+          sizes="100vw"
         />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gold text-sm font-semibold tracking-widest uppercase mb-3">
@@ -52,72 +87,7 @@ export default function InternationalPage() {
         </div>
       </section>
 
-      {/* Filters + Grid */}
-      <section className="py-14 bg-surface">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Filter bar */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 mb-10 flex flex-col sm:flex-row gap-5 items-start sm:items-center">
-            <div>
-              <p className="text-xs font-semibold text-muted uppercase mb-2">Budget</p>
-              <div className="flex flex-wrap gap-2">
-                {BUDGETS.map((b, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setBudgetIdx(i)}
-                    className={`text-xs px-4 py-1.5 rounded-full border transition-colors ${
-                      budgetIdx === i
-                        ? "bg-navy text-white border-navy"
-                        : "border-gray-200 text-slate hover:border-navy hover:text-navy"
-                    }`}
-                  >
-                    {b.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="sm:border-l sm:border-gray-200 sm:pl-5">
-              <p className="text-xs font-semibold text-muted uppercase mb-2">Duration</p>
-              <div className="flex flex-wrap gap-2">
-                {DURATIONS.map((d) => (
-                  <button
-                    key={d}
-                    onClick={() => setDuration(d)}
-                    className={`text-xs px-4 py-1.5 rounded-full border transition-colors ${
-                      duration === d
-                        ? "bg-navy text-white border-navy"
-                        : "border-gray-200 text-slate hover:border-navy hover:text-navy"
-                    }`}
-                  >
-                    {d}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Result count */}
-          <p className="text-sm text-muted mb-6">
-            {filtered.length} package{filtered.length !== 1 ? "s" : ""} found
-          </p>
-
-          {/* Cards */}
-          {filtered.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {filtered.map((pkg) => (
-                <PackageCard key={pkg.id} pkg={pkg} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20 text-muted">
-              <p className="text-lg font-semibold mb-2">No packages match your filters</p>
-              <p className="text-sm">Try adjusting your budget or duration selection.</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      <CTASection />
+      <InternationalPackagesClient />
     </>
   );
 }
