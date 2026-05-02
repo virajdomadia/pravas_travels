@@ -23,10 +23,7 @@
 - ✅ Retrieves all packages with filters
 - ✅ Data survives server restarts
 
-### Connection Details
-```env
-MONGO_URI=mongodb+srv://virajdomadia6:Viraj0610@cluster0.wti2c.mongodb.net/PravaasHolidays?retryWrites=true&w=majority&appName=Cluster0
-```
+
 
 **Status**: 🟢 **Live & Working** - All 11 packages stored in MongoDB
 
