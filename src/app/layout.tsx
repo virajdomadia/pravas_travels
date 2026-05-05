@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Viewport } from "next";
 import LayoutWrapper from "@/components/LayoutWrapper";
@@ -84,6 +85,18 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-MJDY5MF2Z9"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MJDY5MF2Z9');
+          `}
+        </Script>
       </head>
       <body className="min-h-screen flex flex-col font-body antialiased">
         <LayoutWrapper>{children}</LayoutWrapper>
